@@ -1,7 +1,28 @@
+"use client";
+import { auth } from "@/firbase.config"; // make sure firebase is initialized in this file
+import { onAuthStateChanged } from "firebase/auth";
+import { useRouter } from "next/navigation";
 import { ArrowUpRight, Copy, Plus } from "lucide-react";
-import React from "react";
+import { useEffect, useState } from "react";
 
-const page = () => {
+const Page = () => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        router.push("/signin");
+      } else {
+        setLoading(false);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router]);
+
+  if (loading) return <p>Loading...</p>;
+
   return (
     <div className="w-full flex flex-col h-full">
       {/* nav-bar */}
@@ -34,13 +55,11 @@ const page = () => {
 
       {/* urls grid */}
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-        {/* url-item */}
         {[...Array(1)].map((_, i) => (
           <div
             key={i}
             className="flex flex-col gap-3 bg-[#252525] p-4 rounded-2xl"
           >
-            {/* top */}
             <div className="w-full flex justify-between items-center">
               <h3 className="font-fd text-2xl">Graph problems</h3>
               <div className="flex gap-2 items-center">
@@ -49,13 +68,11 @@ const page = () => {
               </div>
             </div>
 
-            {/* description */}
             <p className="font-mont font-medium text-[14px] tracking-[-0.015em] leading-tight">
               A curated collection of LeetCode graph problems designed to take
               you from beginner to expert.
             </p>
 
-            {/* tags */}
             <div className="w-full flex gap-2 flex-wrap">
               <div className="font-fd bg-[#CF8E00] rounded-2xl px-3 py-[2px] text-[13px]">
                 Leetcode
@@ -71,4 +88,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
