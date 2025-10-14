@@ -2,7 +2,7 @@
 import { auth, provider } from "@/firbase.config";
 import { signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 import React from "react";
 import { UserContext } from "../_context/user.context";
@@ -10,7 +10,9 @@ import { UserContext } from "../_context/user.context";
 const Page = () => {
   const { user } = useContext(UserContext);
   const router = useRouter();
-  if (user) router.push("/");
+  useEffect(() => {
+    if (user) router.push("/");
+  });
 
   const handleGoogleLogin = async () => {
     try {

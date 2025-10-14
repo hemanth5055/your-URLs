@@ -2,34 +2,38 @@
 
 import { useEffect, useContext } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowUpRight, Copy, Plus } from "lucide-react";
+import { ArrowUpRight, Copy, Loader, Plus } from "lucide-react";
 import { UserContext } from "./_context/user.context";
+import { signOut } from "firebase/auth";
+import { auth } from "@/firbase.config";
 
 const Page = () => {
-  const context = useContext(UserContext);
   const router = useRouter();
-
-  if (!context) {
-    throw new Error("Page must be used within a UserContextProvider");
-  }
-
-  const { user } = context;
-
-  // Redirect only in useEffect
+  const context = useContext(UserContext);
+  if (!context) throw new Error("Must be used within a UserContextProvider");
+  const { user, loading } = context;
   useEffect(() => {
-    if (!user) {
-      router.push("/");
+    if (!loading && !user) {
+      router.push("/signin");
     }
-  }, [user, router]);
+  }, [loading, user, router]);
 
-  // Optionally show loading until user is determined
-  if (!user) {
+  if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen text-gray-400">
-        Loading...
+      <div className="flex justify-center items-center h-screen text-gray-400 animate-spin">
+        <Loader></Loader>
       </div>
     );
   }
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      router.push("/signin"); // Redirect after successful logout
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
 
   return (
     <div className="w-full flex flex-col h-full">
@@ -42,10 +46,12 @@ const Page = () => {
           <button className="bg-[#2F2F2F] rounded-3xl px-4 py-[10px] font-medium cursor-pointer flex gap-2">
             <Plus /> <span className="font-fd text-[16px]">Add URL</span>
           </button>
-          <div className="w-[40px] h-[40px] rounded-full bg-[#A2F369] flex justify-center items-center">
-            <span className="font-fd text-black font-medium">
-              {user.displayName?.[0] ?? "U"}
-            </span>
+          <div
+            className="w-[40px] h-[40px] rounded-full bg-[#A2F369] flex justify-center items-center cursor-pointer"
+            title="logout"
+            onClick={handleLogout}
+          >
+            <span className="font-fd text-black font-medium">H</span>
           </div>
         </div>
       </div>
