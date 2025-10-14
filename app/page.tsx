@@ -1,43 +1,51 @@
 "use client";
-import { auth } from "@/firbase.config"; // make sure firebase is initialized in this file
-import { onAuthStateChanged } from "firebase/auth";
+
+import { useEffect, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowUpRight, Copy, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { UserContext } from "./_context/user.context";
 
 const Page = () => {
+  const context = useContext(UserContext);
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
 
+  if (!context) {
+    throw new Error("Page must be used within a UserContextProvider");
+  }
+
+  const { user } = context;
+
+  // Redirect only in useEffect
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        router.push("/signin");
-      } else {
-        setLoading(false);
-      }
-    });
+    if (!user) {
+      router.push("/");
+    }
+  }, [user, router]);
 
-    return () => unsubscribe();
-  }, [router]);
-
-  if (loading) return <p>Loading...</p>;
+  // Optionally show loading until user is determined
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center h-screen text-gray-400">
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <div className="w-full flex flex-col h-full">
       {/* nav-bar */}
-      <div className="flex justify-between items-center ">
-        <div>
-          <h1 className="text-4xl font-fd">Your URL's</h1>
-        </div>
+      <div className="flex justify-between items-center">
+        <h1 className="text-4xl font-fd">Your URLs</h1>
 
         {/* tools */}
         <div className="flex items-center gap-5">
-          <div className="bg-[#2F2F2F] rounded-3xl px-4 py-[10px] font-medium cursor-pointer flex gap-2">
-            <Plus /> <h4 className="font-fd text-[16px]">Add URL</h4>
-          </div>
+          <button className="bg-[#2F2F2F] rounded-3xl px-4 py-[10px] font-medium cursor-pointer flex gap-2">
+            <Plus /> <span className="font-fd text-[16px]">Add URL</span>
+          </button>
           <div className="w-[40px] h-[40px] rounded-full bg-[#A2F369] flex justify-center items-center">
-            <h1 className="font-fd text-black font-medium">R</h1>
+            <span className="font-fd text-black font-medium">
+              {user.displayName?.[0] ?? "U"}
+            </span>
           </div>
         </div>
       </div>
@@ -68,7 +76,7 @@ const Page = () => {
               </div>
             </div>
 
-            <p className="font-mont font-medium text-[14px] tracking-[-0.015em] leading-tight">
+            <p className="font-mont font-medium text-[14px] leading-tight">
               A curated collection of LeetCode graph problems designed to take
               you from beginner to expert.
             </p>

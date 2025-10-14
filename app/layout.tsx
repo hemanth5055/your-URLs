@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { Montserrat, Funnel_Display } from "next/font/google";
 import "./globals.css";
+import { UserContextProvider } from "./_context/user.context";
 
 const mont = Montserrat({
   variable: "--font-mont",
   subsets: ["latin"],
 });
-
 
 const fd = Funnel_Display({
   variable: "--font-fd",
@@ -24,10 +24,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${mont.variable} ${fd.variable} antialiased p-5 h-screen`}>
-        {children}
-      </body>
-    </html>
+    <UserContextProvider>
+      <html lang="en">
+        <body
+          className={`${mont.variable} ${fd.variable} antialiased p-5 h-screen`}
+        >
+          {children}
+        </body>
+      </html>
+    </UserContextProvider>
   );
 }

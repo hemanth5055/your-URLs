@@ -1,21 +1,16 @@
 "use client";
 import { auth, provider } from "@/firbase.config";
-import { getAuth, signInWithPopup, onAuthStateChanged } from "firebase/auth";
-import { useRouter } from "next/navigation"; 
-import { useEffect } from "react";
+import { signInWithPopup } from "firebase/auth";
+import { useRouter } from "next/navigation";
+import { useContext } from "react";
 
 import React from "react";
+import { UserContext } from "../_context/user.context";
 
 const Page = () => {
+  const { user } = useContext(UserContext);
   const router = useRouter();
-  const authL = getAuth();
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(authL, (user) => {
-      if (user) router.push("/");
-    });
-    return () => unsubscribe();
-  }, [authL, router]);
+  if (user) router.push("/");
 
   const handleGoogleLogin = async () => {
     try {
