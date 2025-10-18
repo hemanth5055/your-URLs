@@ -1,28 +1,52 @@
 "use client";
 
 import { db } from "@/firbase.config";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { useUrls } from "./_context/url.context";
+import { UserContext } from "./_context/user.context";
 
-const Page = ({ userId }: { userId: string }) => {
+const Page = () => {
+  const { user } = useContext(UserContext);
+  const userId = user.uid;
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [url, setUrl] = useState("");
+  const { setUrls } = useUrls();
 
   const addUrl = async () => {
-    // Handle submission logic here
+    if (!userId) return; // make sure userId exists
     if (title && description && url) {
-      const collRef = collection(db, "urls");
-      const result = await addDoc(collRef, {
-        userId,
-        title,
-        description,
-        url,
-      });
-      console.log(result);
+      try {
+        const collRef = collection(db, "urls");
+        const docRef = await addDoc(collRef, {
+          userId: userId,
+          title,
+          description,
+          url,
+          createdAt: serverTimestamp(),
+        });
+
+        // Add new URL to context state with the Firestore ID
+        setUrls((prev) => [
+          { id: docRef.id, title, description, url, userId },
+          ...prev,
+        ]);
+
+        resetAndClose();
+      } catch (error) {
+        console.error("Error adding URL:", error);
+      }
     }
+  };
+
+  const resetAndClose = () => {
+    setTitle("");
+    setDescription("");
+    setUrl("");
+    setShowModal(false);
   };
 
   return (

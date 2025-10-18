@@ -9,7 +9,7 @@ interface UserContextType {
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
-export const UserContext = createContext<UserContextType | undefined>(undefined);
+export const UserContext = createContext<UserContextType | null>(null);
 
 interface Props {
   children: ReactNode;
