@@ -5,6 +5,7 @@ import { UserContext } from "./_context/user.context";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firbase.config";
 import { useRouter } from "next/navigation";
+import AddUrl from "./AddUrl";
 
 export const App = () => {
   const router = useRouter();
@@ -17,6 +18,7 @@ export const App = () => {
       console.error("Error signing out:", error);
     }
   };
+  
   return (
     <div className="w-full flex flex-col h-full">
       {/* nav-bar */}
@@ -25,9 +27,7 @@ export const App = () => {
 
         {/* tools */}
         <div className="flex items-center gap-5">
-          <button className="bg-[#2F2F2F] rounded-3xl px-4 py-[10px] font-medium cursor-pointer flex gap-2">
-            <Plus /> <span className="font-fd text-[16px]">Add URL</span>
-          </button>
+          <AddUrl userId={user.uid}></AddUrl>
           <div
             className="w-[40px] h-[40px] rounded-full bg-[#A2F369] flex justify-center items-center cursor-pointer"
             title="logout"
