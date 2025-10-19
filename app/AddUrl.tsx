@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 
 const Page = () => {
   const { user } = useContext(UserContext);
+  if (!user) return null;
   const userId = user.uid;
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState("");

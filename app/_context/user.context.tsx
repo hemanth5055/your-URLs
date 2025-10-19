@@ -1,4 +1,5 @@
 "use client";
+
 import { ReactNode, createContext, useEffect, useState } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "@/firbase.config";
@@ -9,7 +10,12 @@ interface UserContextType {
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
-export const UserContext = createContext<UserContextType | null>(null);
+// Provide a default no-op function for setUser
+export const UserContext = createContext<UserContextType>({
+  user: null,
+  loading: false,
+  setUser: () => {},
+});
 
 interface Props {
   children: ReactNode;
@@ -22,8 +28,9 @@ export const UserContextProvider = ({ children }: Props) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser ?? null);
-      setLoading(false); 
+      setLoading(false);
     });
+
     return () => unsubscribe();
   }, []);
 
