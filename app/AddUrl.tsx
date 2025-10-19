@@ -33,7 +33,14 @@ const Page = () => {
         });
         // Add new URL to context state with the Firestore ID
         setUrls((prev) => [
-          { id: docRef.id, title, description, url, userId,tags },
+          {
+            id: docRef.id,
+            title,
+            description,
+            url,
+            userId,
+            tags: sanitizeTags(tags),
+          },
           ...prev,
         ]);
         toast.success("URL added successfully !");
@@ -68,15 +75,16 @@ const Page = () => {
     <div>
       {/* Button to open modal */}
       <button
-        className="bg-[#2F2F2F] rounded-3xl px-4 py-[10px] font-medium cursor-pointer flex gap-2"
+        className="bg-[#2F2F2F] rounded-3xl max-sm:p-2 px-4 py-[10px] max-sm:px-2 font-medium cursor-pointer flex gap-2"
         onClick={() => setShowModal(true)}
       >
-        <Plus /> <span className="font-fd text-[16px]">Add URL</span>
+        <Plus />{" "}
+        <span className="font-fd text-[16px] max-sm:hidden">Add URL</span>
       </button>
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="fixed inset-0 flex items-center justify-center z-50 max-sm:p-2">
           {/* Background blur */}
           <div
             className="absolute inset-0 bg-black/40 backdrop-blur-sm"
@@ -85,7 +93,7 @@ const Page = () => {
 
           {/* Modal content */}
           <div className="relative rounded-xl p-8 w-[500px] max-w-full z-10 shadow-lg flex flex-col gap-4 bg-[#252525]">
-            <h2 className="text-3xl font-bold font-fd text-center mb-2">
+            <h2 className="text-3xl font-bold font-fd text-center mb-2 ">
               Add a New URL
             </h2>
 

@@ -22,10 +22,10 @@ export const App = () => {
   };
 
   return (
-    <div className="w-full flex flex-col h-full">
+    <div className="w-full flex flex-col h-full ">
       {/* nav-bar */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-fd">Your URLs</h1>
+        <h1 className="text-4xl max-sm:text-3xl font-fd">Your URLs</h1>
 
         {/* tools */}
         <div className="flex items-center gap-5">
@@ -46,7 +46,7 @@ export const App = () => {
           type="text"
           name="search"
           id="search"
-          className="w-[30%] h-[50px] rounded-3xl bg-[#2F2F2F] pl-4 font-mont font-medium outline-none"
+          className="w-[30%] max-sm:w-full h-[50px] rounded-3xl bg-[#2F2F2F] pl-4 font-mont font-medium outline-none"
           placeholder="Search urls"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
