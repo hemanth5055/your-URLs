@@ -9,12 +9,15 @@ const Page = ({
   title,
   description,
   url,
+  tags,
 }: {
   id: string;
   title: string;
   description: string;
   url: string;
+  tags: string;
 }) => {
+  console.log(tags);
   const { deleteUrl } = useUrls();
   const copyToClipboard = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -56,12 +59,16 @@ const Page = ({
       </p>
 
       <div className="w-full flex gap-2 flex-wrap">
-        <div className="font-fd bg-gray-600 rounded-2xl px-3 py-[2px] text-[13px]">
-          Leetcode
-        </div>
-        <div className="font-fd bg-gray-600 rounded-2xl px-3 py-[2px] text-[13px]">
-          Graph
-        </div>
+        {JSON.parse(tags || "[]")
+          .slice(0, 3)
+          .map((tag: string, index: number) => (
+            <div
+              key={index}
+              className="font-fd bg-gray-600 rounded-2xl px-3 py-[2px] text-[13px]"
+            >
+              {tag}
+            </div>
+          ))}
       </div>
     </div>
   );

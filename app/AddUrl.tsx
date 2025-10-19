@@ -14,6 +14,7 @@ const Page = () => {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [tags, setTags] = useState("");
   const [url, setUrl] = useState("");
   const { setUrls } = useUrls();
 
@@ -27,11 +28,12 @@ const Page = () => {
           title,
           description,
           url,
+          tags: sanitizeTags(tags),
           createdAt: serverTimestamp(),
         });
         // Add new URL to context state with the Firestore ID
         setUrls((prev) => [
-          { id: docRef.id, title, description, url, userId },
+          { id: docRef.id, title, description, url, userId,tags },
           ...prev,
         ]);
         toast.success("URL added successfully !");
@@ -43,10 +45,22 @@ const Page = () => {
     }
   };
 
+  const sanitizeTags = (tagsString: string) => {
+    if (!tagsString) return JSON.stringify([]);
+
+    const tagsArray = tagsString
+      .split(",") // split by commas
+      .map((tag) => tag.trim()) // remove extra spaces
+      .filter((tag) => tag.length > 0) // ignore empty ones
+      .slice(0, 3); // limit to 3 tags
+
+    return JSON.stringify(tagsArray);
+  };
   const resetAndClose = () => {
     setTitle("");
     setDescription("");
     setUrl("");
+    setTags("");
     setShowModal(false);
   };
 
@@ -102,6 +116,14 @@ const Page = () => {
               className="rounded-2xl p-2 py-3 w-full bg-[#1E1E1E] text-white outline-none placeholder:font-fd font-mont font-medium"
             />
 
+            {/* Tags Input */}
+            <input
+              type="text"
+              value={tags}
+              onChange={(e) => setTags(e.target.value)}
+              placeholder="Add tags seperated by comma"
+              className="rounded-2xl p-2 py-3 w-full bg-[#1E1E1E] text-white outline-none placeholder:font-fd font-mont font-medium"
+            />
             {/* Action buttons */}
             <div className="flex justify-center gap-2 mt-2">
               <button
