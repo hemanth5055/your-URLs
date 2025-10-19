@@ -7,12 +7,13 @@ import { useUrls } from "./_context/url.context";
 const Page = ({ searchQuery }: { searchQuery: string }) => {
   const { urls, urlsLoading } = useUrls();
   const filteredUrls = urls.filter((item) => {
-    if (!searchQuery) return true; 
+    if (!searchQuery) return true;
     const q = searchQuery.toLowerCase();
     return (
       item.title.toLowerCase().includes(q) ||
       item.description.toLowerCase().includes(q) ||
-      item.url.toLowerCase().includes(q)
+      item.url.toLowerCase().includes(q) ||
+      item.tags.toLowerCase().includes(q)
     );
   });
 

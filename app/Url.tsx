@@ -31,7 +31,7 @@ const Page = ({
   };
   return (
     <div
-      className="flex flex-col gap-3 bg-[#252525] p-4 rounded-2xl cursor-pointer transition-all duration-300 hover:shadow-[0_0_5px_white] hover:-translate-y-1"
+      className="flex flex-col gap-3 bg-[#252525] p-4 rounded-2xl cursor-pointer transition-all duration-300 hover:shadow-[0_0_5px_gray] hover:-translate-y-1"
       onClick={() => {
         window.open(url, "_blank");
       }}
