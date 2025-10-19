@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 
 import { UserContext } from "./_context/user.context";
 import { signOut } from "firebase/auth";
@@ -10,6 +10,7 @@ import ShowUrl from "./ShowUrl";
 
 export const App = () => {
   const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleLogout = async () => {
     try {
@@ -46,12 +47,14 @@ export const App = () => {
           name="search"
           id="search"
           className="w-[30%] h-[50px] rounded-3xl bg-[#2F2F2F] pl-4 font-mont font-medium outline-none"
-          placeholder="Search by name & tag"
+          placeholder="Search urls"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
       </div>
 
       {/* urls grid */}
-      <ShowUrl></ShowUrl>
+      <ShowUrl searchQuery={searchQuery}></ShowUrl>
     </div>
   );
 };
