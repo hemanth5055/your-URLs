@@ -6,6 +6,7 @@ import { Plus } from "lucide-react";
 import { useContext, useState } from "react";
 import { useUrls } from "./_context/url.context";
 import { UserContext } from "./_context/user.context";
+import toast from "react-hot-toast";
 
 const Page = () => {
   const { user } = useContext(UserContext);
@@ -28,12 +29,12 @@ const Page = () => {
           url,
           createdAt: serverTimestamp(),
         });
-
         // Add new URL to context state with the Firestore ID
         setUrls((prev) => [
           { id: docRef.id, title, description, url, userId },
           ...prev,
         ]);
+        toast.success("URL added successfully !");
 
         resetAndClose();
       } catch (error) {

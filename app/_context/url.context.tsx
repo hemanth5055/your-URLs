@@ -18,6 +18,7 @@ import {
   orderBy,
 } from "firebase/firestore";
 import { db } from "@/firbase.config";
+import toast from "react-hot-toast";
 
 interface UrlType {
   id: string;
@@ -73,11 +74,14 @@ export const UrlProvider = ({ children }: Props) => {
 
   // Function to delete URL
   const deleteUrl = async (id: string) => {
+    const loadingToast = toast.loading("Deleting URL..."); // shows loading indicator
     try {
       await deleteDoc(doc(db, "urls", id));
       setUrls((prev) => prev.filter((url) => url.id !== id));
+      toast.success("URL deleted successfully!", { id: loadingToast });
     } catch (error) {
       console.error("Error deleting URL:", error);
+      toast.error("Failed to delete URL.", { id: loadingToast });
     }
   };
 

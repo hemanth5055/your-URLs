@@ -23,6 +23,7 @@ const Page = () => {
         urls.map((item) => (
           <Url
             key={item.id}
+            id={item.id}
             url={item.url}
             title={item.title}
             description={item.description}
