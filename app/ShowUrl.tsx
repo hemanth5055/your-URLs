@@ -27,7 +27,7 @@ const Page = ({ searchQuery }: { searchQuery: string }) => {
         </div>
       ) : filteredUrls.length === 0 ? (
         <div className="col-span-full flex justify-center items-center h-64">
-          <p className="text-gray-500 text-lg font-fd">No Data found</p>
+          <p className="text-gray-500 text-lg font-fd">CLick on <span className="text-[#A2F369]">+</span> to add a URL.</p>
         </div>
       ) : (
         filteredUrls.map((item) => (
