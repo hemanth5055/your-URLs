@@ -23,15 +23,22 @@ const Page = ({
   description,
   url,
   tags,
+  createdAt,
 }: {
   id: string;
   title: string;
   description: string;
   url: string;
   tags: string;
+  createdAt:any
 }) => {
   const { deleteUrl } = useUrls();
   const tagArray = parseTags(tags);
+  const date = new Date(createdAt.seconds * 1000 + createdAt.nanoseconds / 1e6);
+  // Format as YYYY-MM-DD
+  const formattedDate = date.toISOString().split('T')[0];
+  console.log(formattedDate)
+
 
   const copyToClipboard = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -71,15 +78,21 @@ const Page = ({
         {description}
       </p>
 
-      <div className="w-full flex gap-2 flex-wrap">
-        {tagArray.map((tag, index) => (
+      <div className="w-full flex items-center">
+        <div className="flex gap-2 flex-wrap w-full">
+          {tagArray.map((tag, index) => (
           <div
             key={index}
-            className="font-fd bg-gray-600 rounded-2xl px-3 py-[2px] text-[13px]"
+            className="font-fd bg-gray-600 rounded-2xl px-2 py-[1px] text-[13px]"
           >
             {tag}
           </div>
+        
         ))}
+        </div>
+        <div className="text-lg w-full flex justify-end ">
+          <h2 className="font-semibold text-white-800 text-[13px] font-fd">{formattedDate}</h2>
+        </div>
       </div>
     </div>
   );
