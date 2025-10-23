@@ -38,6 +38,7 @@ const Page = ({ searchQuery }: { searchQuery: string }) => {
             title={item.title}
             description={item.description}
             tags={item.tags}
+            createdAt={item.createdAt}
           />
         ))
       )}
