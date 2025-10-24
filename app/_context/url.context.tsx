@@ -26,7 +26,7 @@ interface UrlType {
   description: string;
   url: string;
   tags: string;
-  createdAt:any
+  createdAt: { seconds: number; nanoseconds: number };
 }
 
 interface UrlContextType {

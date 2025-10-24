@@ -1,7 +1,12 @@
 "use client";
 
 import { db } from "@/firbase.config";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 import { Plus } from "lucide-react";
 import { useContext, useState } from "react";
 import { useUrls } from "./_context/url.context";
@@ -33,17 +38,22 @@ const Page = () => {
           createdAt: serverTimestamp(),
         });
         // Add new URL to context state with the Firestore ID
+        const docSnap = await getDoc(docRef);
+        const data = docSnap.data();
+
         setUrls((prev) => [
           {
             id: docRef.id,
-            title,
-            description,
-            url,
-            userId,
-            tags: sanitizeTags(tags),
+            title: data?.title || title,
+            description: data?.description || description,
+            url: data?.url || url,
+            userId: data?.userId || userId,
+            tags: data?.tags || sanitizeTags(tags),
+            createdAt: data?.createdAt, // convert Firestore Timestamp to JS Date
           },
           ...prev,
         ]);
+
         toast.success("URL added successfully !");
 
         resetAndClose();

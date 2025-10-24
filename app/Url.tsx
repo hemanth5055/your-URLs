@@ -91,7 +91,7 @@ const Page = ({
         ))}
         </div>
         <div className="text-lg w-full flex justify-end ">
-          <h2 className="font-semibold text-white-800 text-[13px] font-fd">{formattedDate}</h2>
+          <h2 className="font-semibold text-white-800 text-[13px] font-mont">{formattedDate}</h2>
         </div>
       </div>
     </div>
